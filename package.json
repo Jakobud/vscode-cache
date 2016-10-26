@@ -1,0 +1,24 @@
+{
+  "name": "vscode-cache",
+  "version": "0.1.0",
+  "description": "Persistent setting and value caching for Visual Studio Code extension authors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Jakobud@github.com/Jakobud/vscode-cache.git"
+  },
+  "keywords": [
+    "vscode",
+    "cache",
+    "extension"
+  ],
+  "author": "Jake Wilson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jakobud/vscode-cache/issues"
+  },
+  "homepage": "https://github.com/Jakobud/vscode-cache#readme"
+}
