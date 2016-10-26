@@ -1,9 +1,8 @@
 'use strict';
 
 /**
- * @module Cache
+ * @class Cache
  * @desc A module for use in developing a Visual Studio Code extension. It allows an extension to cache values across sessions with optional expiration times using the ExtensionContext.globalState.
- * @class
  * @param {vscode.ExtensionContext} context - The Visual Studio Code extension context
  * @param {string} [namespace] - Optional namespace for cached items. Defaults to "cache"
  * @returns {Cache} The cache object
@@ -24,11 +23,11 @@ let Cache = function (context, namespace) {
 }
 
 /**
- * @name cache.put
+ * @name Cache#put
+ * @method
  * @desc Store an item in the cache, with optional expiration
- * @function
  * @param {string} key - The unique key for the cached item
- * @param {string|number|object} value - The value to cache
+ * @param {various} value - The value to cache
  * @param {number} [expiration] - Optional expiration time in seconds
  * @returns {Thenable} Visual Studio Code Thenable (Promise)
  */
@@ -56,7 +55,7 @@ Cache.prototype.put = function (key, value, expiration) {
 }
 
 /**
- * @name cache.get
+ * @name Cache#get
  * @desc Get an item from the cache, or the optional default value
  * @function
  * @param {string} key - The unique key for the cached item
@@ -82,7 +81,7 @@ Cache.prototype.get = function (key, defaultValue) {
 }
 
 /**
- * @name cache.has
+ * @name Cache#has
  * @desc Checks to see if unexpired item exists in the cache
  * @function
  * @param {string} key - The unique key for the cached item
@@ -93,7 +92,7 @@ Cache.prototype.has = function (key) {
 }
 
 /**
- * @name cache.forget
+ * @name Cache#forget
  * @desc Removes an item from the cache
  * @function
  * @param {string} key - The unique key for the cached item
@@ -113,7 +112,7 @@ Cache.prototype.forget = function (key) {
 }
 
 /**
- * @name cache.keys
+ * @name Cache#keys
  * @desc Get an array of all cached item keys
  * @function
  * @return {string[]}
@@ -123,7 +122,7 @@ Cache.prototype.keys = function () {
 }
 
 /**
- * @name cache.all
+ * @name Cache#all
  * @desc Returns object of all cached items
  * @function
  * @return {object}
@@ -133,7 +132,7 @@ Cache.prototype.all = function () {
 }
 
 /**
- * @name cache.flush
+ * @name Cache#flush
  * @desc Clears all items from the cache
  * @function
  * @returns {Thenable} Visual Studio Code Thenable (Promise)
@@ -144,7 +143,7 @@ Cache.prototype.flush = function () {
 }
 
 /**
- * @name cache.expiration
+ * @name Cache#expiration
  * @desc Gets the expiration time for the cached item
  * @function
  * @param {string} key - The unique key for the cached item
@@ -155,7 +154,7 @@ Cache.prototype.getExpiration = function (key) {
 }
 
 /**
- * @name cache.isExpired
+ * @name Cache#isExpired
  * @desc Checks to see if cached item is expired
  * @function
  * @param {object} item - Cached item object
