@@ -96,3 +96,222 @@ databaseCache.put('foo', databaseResults);
 
 // Because there are two caches, you can use the same keys in each without overriding values
 ```
+
+<a name="Cache"></a>
+
+## Cache
+**Kind**: global class  
+
+* [Cache](#Cache)
+    * [new Cache(context, [namespace])](#new_Cache_new)
+    * [.put(key, value, [expiration])](#Cache+put) ⇒ <code>Thenable</code>
+    * [.get(key, [defaultValue])](#Cache+get) ⇒ <code>string</code> &#124; <code>number</code> &#124; <code>object</code>
+    * [.has(key)](#Cache+has) ⇒ <code>boolean</code>
+    * [.forget(key)](#Cache+forget) ⇒ <code>Thenable</code> &#124; <code>false</code>
+    * [.keys()](#Cache+keys) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.all()](#Cache+all) ⇒ <code>object</code>
+    * [.flush()](#Cache+flush) ⇒ <code>Thenable</code>
+    * [.expiration(key)](#Cache+expiration) ⇒ <code>number</code>
+    * [.isExpired(item)](#Cache+isExpired) ⇒ <code>boolean</code>
+
+
+* * *
+
+<a name="new_Cache_new"></a>
+
+### new Cache(context, [namespace])
+A module for use in developing a Visual Studio Code extension. It allows an extension to cache values across sessions with optional expiration times using the ExtensionContext.globalState.
+
+**Returns**: <code>[Cache](#Cache)</code> - The cache object  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>context</td><td><code>vscode.ExtensionContext</code></td><td><p>The Visual Studio Code extension context</p>
+</td>
+    </tr><tr>
+    <td>[namespace]</td><td><code>string</code></td><td><p>Optional namespace for cached items. Defaults to &quot;cache&quot;</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+
+* * *
+
+<a name="Cache+put"></a>
+
+### cache.put(key, value, [expiration]) ⇒ <code>Thenable</code>
+Store an item in the cache, with optional expiration
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+**Returns**: <code>Thenable</code> - Visual Studio Code Thenable (Promise)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>key</td><td><code>string</code></td><td><p>The unique key for the cached item</p>
+</td>
+    </tr><tr>
+    <td>value</td><td><code>various</code></td><td><p>The value to cache</p>
+</td>
+    </tr><tr>
+    <td>[expiration]</td><td><code>number</code></td><td><p>Optional expiration time in seconds</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+
+* * *
+
+<a name="Cache+get"></a>
+
+### cache.get(key, [defaultValue]) ⇒ <code>string</code> &#124; <code>number</code> &#124; <code>object</code>
+Get an item from the cache, or the optional default value
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+**Returns**: <code>string</code> &#124; <code>number</code> &#124; <code>object</code> - Returns the cached value or optional defaultValue  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>key</td><td><code>string</code></td><td><p>The unique key for the cached item</p>
+</td>
+    </tr><tr>
+    <td>[defaultValue]</td><td><code>string</code> | <code>number</code> | <code>object</code></td><td><p>The optional default value to return if the cached item does not exist or is expired</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+
+* * *
+
+<a name="Cache+has"></a>
+
+### cache.has(key) ⇒ <code>boolean</code>
+Checks to see if unexpired item exists in the cache
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>key</td><td><code>string</code></td><td><p>The unique key for the cached item</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+
+* * *
+
+<a name="Cache+forget"></a>
+
+### cache.forget(key) ⇒ <code>Thenable</code> &#124; <code>false</code>
+Removes an item from the cache
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+**Returns**: <code>Thenable</code> &#124; <code>false</code> - Visual Studio Code Thenable (Promise) or false if key does not exist  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>key</td><td><code>string</code></td><td><p>The unique key for the cached item</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+
+* * *
+
+<a name="Cache+keys"></a>
+
+### cache.keys() ⇒ <code>Array.&lt;string&gt;</code>
+Get an array of all cached item keys
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+
+* * *
+
+<a name="Cache+all"></a>
+
+### cache.all() ⇒ <code>object</code>
+Returns object of all cached items
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+
+* * *
+
+<a name="Cache+flush"></a>
+
+### cache.flush() ⇒ <code>Thenable</code>
+Clears all items from the cache
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+**Returns**: <code>Thenable</code> - Visual Studio Code Thenable (Promise)  
+
+* * *
+
+<a name="Cache+expiration"></a>
+
+### cache.expiration(key) ⇒ <code>number</code>
+Gets the expiration time for the cached item
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+**Returns**: <code>number</code> - Unix Timestamp in seconds  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>key</td><td><code>string</code></td><td><p>The unique key for the cached item</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+
+* * *
+
+<a name="Cache+isExpired"></a>
+
+### cache.isExpired(item) ⇒ <code>boolean</code>
+Checks to see if cached item is expired
+
+**Kind**: instance method of <code>[Cache](#Cache)</code>  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>item</td><td><code>object</code></td><td><p>Cached item object</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+
+* * *
+
