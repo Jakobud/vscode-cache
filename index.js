@@ -54,6 +54,26 @@ Cache.prototype.put = function (key, value, expiration) {
   return this.context.globalState.update(this.namespace, this.cache);
 }
 
+// Alias of put
+Cache.prototype.set = function (key, value, expiration) {
+  return this.put(key, value, expiration);
+}
+
+// Alias of put
+Cache.prototype.save = function (key, value, expiration) {
+  return this.put(key, value, expiration);
+}
+
+// Alias of put
+Cache.prototype.store = function (key, value, expiration) {
+  return this.put(key, value, expiration);
+}
+
+// Alias of put
+Cache.prototype.cache = function (key, value, expiration) {
+  return this.put(key, value, expiration);
+}
+
 /**
  * @name Cache#get
  * @desc Get an item from the cache, or the optional default value
@@ -80,6 +100,16 @@ Cache.prototype.get = function (key, defaultValue) {
   }
 }
 
+// Alias of get
+Cache.prototype.fetch = function (key, defaultValue) {
+  return this.get(key, defaultValue);
+}
+
+// Alias of get
+Cache.prototype.retrieve = function (key, defaultValue) {
+  return this.get(key, defaultValue);
+}
+
 /**
  * @name Cache#has
  * @desc Checks to see if unexpired item exists in the cache
@@ -89,6 +119,11 @@ Cache.prototype.get = function (key, defaultValue) {
  */
 Cache.prototype.has = function (key) {
   return (typeof (this.cache[key]) !== 'undefined' && !this.isExpired(key));
+}
+
+// Alias of has
+Cache.prototype.exists = function (key) {
+  return this.has(key);
 }
 
 /**
@@ -111,6 +146,16 @@ Cache.prototype.forget = function (key) {
   return this.context.globalState.update(this.namespace, this.cache);
 }
 
+// Alias of forget
+Cache.prototype.remove = function (key) {
+  return this.forget(key);
+}
+
+// Alias of forget
+Cache.prototype.delete = function (key) {
+  return this.forget(key);
+}
+
 /**
  * @name Cache#keys
  * @desc Get an array of all cached item keys
@@ -131,6 +176,11 @@ Cache.prototype.all = function () {
   return this.cache;
 }
 
+// Alias of all
+Cache.prototype.getAll = function () {
+  return this.all();
+}
+
 /**
  * @name Cache#flush
  * @desc Clears all items from the cache
@@ -140,6 +190,11 @@ Cache.prototype.all = function () {
 Cache.prototype.flush = function () {
   this.cache = {};
   return this.context.globalState.update(this.namespace, undefined);
+}
+
+// Alias of flush
+Cache.prototype.clearAll = function () {
+  return this.flush();
 }
 
 /**
