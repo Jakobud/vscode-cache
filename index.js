@@ -27,7 +27,7 @@ let Cache = function (context, namespace) {
  * @method
  * @desc Store an item in the cache, with optional expiration
  * @param {string} key - The unique key for the cached item
- * @param {various} value - The value to cache
+ * @param {any} value - The value to cache
  * @param {number} [expiration] - Optional expiration time in seconds
  * @returns {Thenable} Visual Studio Code Thenable (Promise)
  */
@@ -59,8 +59,8 @@ Cache.prototype.put = function (key, value, expiration) {
  * @desc Get an item from the cache, or the optional default value
  * @function
  * @param {string} key - The unique key for the cached item
- * @param {string|number|object} [defaultValue] - The optional default value to return if the cached item does not exist or is expired
- * @returns {string|number|object} Returns the cached value or optional defaultValue
+ * @param {any} [defaultValue] - The optional default value to return if the cached item does not exist or is expired
+ * @returns {any} Returns the cached value or optional defaultValue
  */
 Cache.prototype.get = function (key, defaultValue) {
 
