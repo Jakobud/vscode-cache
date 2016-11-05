@@ -4,7 +4,7 @@
   "description": "Persistent setting and value caching for Visual Studio Code extension authors",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/test.js",
     "jsdoc": "jsdoc2md --template README.hbs --separators --no-gfm --files index.js > README.md"
   },
   "repository": {
@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/Jakobud/vscode-cache#readme",
   "devDependencies": {
-    "jsdoc-to-markdown": "^2.0.1"
+    "bluebird": "^3.4.6",
+    "jsdoc-to-markdown": "^2.0.1",
+    "mocha": "^3.1.2"
   }
 }
