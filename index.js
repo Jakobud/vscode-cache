@@ -29,13 +29,15 @@ let Cache = function (context, namespace) {
  * @param {string} key - The unique key for the cached item
  * @param {any} value - The value to cache
  * @param {number} [expiration] - Optional expiration time in seconds
- * @returns {Thenable} Visual Studio Code Thenable (Promise)
+ * @returns {Promise} Visual Studio Code Thenable (Promise)
  */
 Cache.prototype.put = function (key, value, expiration) {
 
   // Parameter type checking
   if (typeof (key) !== 'string' || typeof (value) === 'undefined') {
-    return undefined; // Does this need to return a Thenable?
+    return new Promise((resolve, reject) => {
+      resolve(false);
+    });
   }
 
   let obj = {
