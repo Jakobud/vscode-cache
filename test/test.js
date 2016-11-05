@@ -3,11 +3,11 @@ const ExtensionContext = require('./ExtensionContextMock');
 const Cache = require('../index.js');
 
 // Test ExtensionContext Mock
-describe('ExtensionContextMock', () => {
+describe('ExtensionContextMock', function () {
 
-  describe('globalState.update()', () => {
+  describe('globalState.update()', function () {
 
-    it('should return true when updating a value', () => {
+    it('should return true when updating a value', function () {
       let context = new ExtensionContext();
       context.globalState.update('foo', 'bar')
         .then((value) => {
@@ -15,7 +15,7 @@ describe('ExtensionContextMock', () => {
         });
     });
 
-    it('should return true when updating value with undefined', () => {
+    it('should return true when updating value with undefined', function () {
       let context = new ExtensionContext();
       context.globalState.update('foo', undefined)
         .then((value) => {
@@ -25,9 +25,9 @@ describe('ExtensionContextMock', () => {
 
   });
 
-  describe('globalState.get()', () => {
+  describe('globalState.get()', function () {
 
-    it('should return the value when getting the value', () => {
+    it('should return the value when getting the value', function () {
       let context = new ExtensionContext();
       context.globalState.update('foo', 'bar')
         .then((value) => {
