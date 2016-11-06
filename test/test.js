@@ -73,7 +73,7 @@ describe('Cache', function () {
       let value = 'bar';
       return cache.put(key, value)
         .then(() => {
-          assert.equal(cache.get(key), value);
+          assert.equal(cache.cache[key].value, value);
         });
     });
 
@@ -102,6 +102,37 @@ describe('Cache', function () {
       return cache.put(true, 'bar')
         .then((success) => {
           assert.equal(success, false);
+        });
+    });
+
+    it('should set expirations properly', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let now = Math.floor(Date.now() / 1000);
+      let lifetime = 5;
+      let key = 'foo';
+      let value = 'bar';
+      return cache.put(key, value, lifetime)
+        .then((success) => {
+          assert.equal(cache.getExpiration(key), now + lifetime);
+        });
+    });
+
+    it('should expire items properly', function (done) {
+      this.timeout(3000);
+
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let now = Math.floor(Date.now() / 1000);
+      let lifetime = 1;
+      let key = 'foo';
+      let value = 'bar';
+      cache.put(key, value, lifetime)
+        .then((success) => {
+          return setTimeout(function () {
+            assert.equal(typeof (cache.get(key)), 'undefined');
+            done();
+          }, 2000);
         });
     });
 
