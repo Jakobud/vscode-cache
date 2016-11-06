@@ -96,8 +96,12 @@ Cache.prototype.get = function (key, defaultValue) {
       return undefined;
     }
 
-    // Otherwise return the value
   } else {
+    // Is item expired?
+    if (this.isExpired(key)) {
+      return undefined;
+    }
+    // Otherwise return the value
     return this.cache[key].value;
   }
 }
