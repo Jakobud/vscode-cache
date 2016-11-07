@@ -124,7 +124,11 @@ Cache.prototype.retrieve = function (key, defaultValue) {
  * @return {boolean}
  */
 Cache.prototype.has = function (key) {
-  return (typeof (this.cache[key]) !== 'undefined' && !this.isExpired(key));
+  if (typeof (this.cache[key]) === 'undefined') {
+    return false;
+  } else {
+    return this.isExpired(key) ? false : true;
+  }
 }
 
 // Alias of has
