@@ -141,12 +141,14 @@ Cache.prototype.exists = function (key) {
  * @desc Removes an item from the cache
  * @function
  * @param {string} key - The unique key for the cached item
- * @returns {Thenable|false} Visual Studio Code Thenable (Promise) or false if key does not exist
+ * @returns {Thenable} Visual Studio Code Thenable (Promise)
  */
 Cache.prototype.forget = function (key) {
   // Does item exist?
   if (typeof (this.cache[key]) === 'undefined') {
-    return false;
+    return new Promise(function (resolve, reject) {
+      resolve(true);
+    });
   }
 
   // Delete from local object
