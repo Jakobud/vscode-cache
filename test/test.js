@@ -1,4 +1,5 @@
 const assert = require('assert');
+const Promise = require('bluebird');
 const ExtensionContext = require('./ExtensionContextMock');
 const Cache = require('../index.js');
 
@@ -9,16 +10,16 @@ describe('ExtensionContextMock', function () {
 
     it('should return true when updating a value', function () {
       let context = new ExtensionContext();
-      context.globalState.update('foo', 'bar')
-        .then((value) => {
+      return context.globalState.update('foo', 'bar')
+        .then(function (value) {
           assert.equal(value, true);
         });
     });
 
     it('should return true when updating value with undefined', function () {
       let context = new ExtensionContext();
-      context.globalState.update('foo', undefined)
-        .then((value) => {
+      return context.globalState.update('foo', undefined)
+        .then(function (value) {
           assert.equal(value, true);
         });
     });
@@ -29,8 +30,8 @@ describe('ExtensionContextMock', function () {
 
     it('should return the value when getting the value', function () {
       let context = new ExtensionContext();
-      context.globalState.update('foo', 'bar')
-        .then((value) => {
+      return context.globalState.update('foo', 'bar')
+        .then(function (value) {
           assert.equal(context.globalState.get('foo'), 'bar');
         });
     });
@@ -43,13 +44,13 @@ describe('Cache', function () {
 
   describe('constructor', function () {
 
-    it('should set the context properly', function () {
+    it('should set the context', function () {
       let context = new ExtensionContext();
       let cache = new Cache(context);
       assert.equal(cache.context, context);
     });
 
-    it('should set the namespace properly', function () {
+    it('should set the namespace', function () {
       let context = new ExtensionContext();
       let namespace = 'foo';
       let cache = new Cache(context, namespace);
@@ -62,6 +63,23 @@ describe('Cache', function () {
       assert.deepEqual(cache.cache, {});
     });
 
+    it('should namespace multiple caches', function () {
+      let context = new ExtensionContext();
+      let cache1 = new Cache(context, 'cache1');
+      let cache2 = new Cache(context, 'cache2');
+      let key = 'foo';
+      let value1 = 'bar1';
+      let value2 = 'bar2';
+      return cache1.put(key, value1)
+        .then(function () {
+          return cache2.put(key, value2);
+        })
+        .then(function () {
+          assert.notEqual(cache1.get(key), cache2.get(key));
+        });
+
+    });
+
   });
 
   describe('put', function () {
@@ -72,7 +90,7 @@ describe('Cache', function () {
       let key = 'foo';
       let value = 'bar';
       return cache.put(key, value)
-        .then(() => {
+        .then(function () {
           assert.equal(cache.cache[key].value, value);
         });
     });
@@ -81,7 +99,7 @@ describe('Cache', function () {
       let context = new ExtensionContext();
       let cache = new Cache(context);
       return cache.put(100, 'bar')
-        .then((success) => {
+        .then(function (success) {
           assert.equal(success, false);
         });
     });
@@ -91,7 +109,7 @@ describe('Cache', function () {
       let cache = new Cache(context);
       let obj = {};
       return cache.put(obj, 'bar')
-        .then((success) => {
+        .then(function (success) {
           assert.equal(success, false);
         });
     });
@@ -100,12 +118,12 @@ describe('Cache', function () {
       let context = new ExtensionContext();
       let cache = new Cache(context);
       return cache.put(true, 'bar')
-        .then((success) => {
+        .then(function (success) {
           assert.equal(success, false);
         });
     });
 
-    it('should set expirations properly', function () {
+    it('should set expirations', function () {
       let context = new ExtensionContext();
       let cache = new Cache(context);
       let now = Math.floor(Date.now() / 1000);
@@ -113,12 +131,12 @@ describe('Cache', function () {
       let key = 'foo';
       let value = 'bar';
       return cache.put(key, value, lifetime)
-        .then((success) => {
+        .then(function () {
           assert.equal(cache.getExpiration(key), now + lifetime);
         });
     });
 
-    it('should expire items properly', function (done) {
+    it('should expire items', function (done) {
       this.timeout(3000);
 
       let context = new ExtensionContext();
@@ -128,12 +146,94 @@ describe('Cache', function () {
       let key = 'foo';
       let value = 'bar';
       cache.put(key, value, lifetime)
-        .then((success) => {
-          return setTimeout(function () {
+        .then(function () {
+          setTimeout(function () {
             assert.equal(typeof (cache.get(key)), 'undefined');
             done();
           }, 2000);
         });
+    });
+
+  });
+
+  describe('has', function () {
+
+    it('should indicate when a cached item exists', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let key = 'foo';
+      let value = 'bar';
+      return cache.put(key, value)
+        .then(function () {
+          assert(cache.has(key));
+        });
+    });
+
+    it('should indicate when an expired item does not exist', function (done) {
+      this.timeout(3000);
+
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let now = Math.floor(Date.now() / 1000);
+      let lifetime = 1;
+      let key = 'foo';
+      let value = 'bar';
+      cache.put(key, value, lifetime)
+        .then(function () {
+          setTimeout(function () {
+            assert.equal(cache.has(key), false);
+            done();
+          }, 2000);
+        });
+    });
+
+  });
+
+  describe('forget', function () {
+
+    it('should remove a cache item', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let key = 'foo';
+      let value = 'bar';
+      return cache.put(key, value)
+        .then(function () {
+          return cache.forget(key);
+        })
+        .then(function () {
+          assert.equal(cache.has(key), false);
+        });
+    });
+
+  });
+
+  describe('keys', function () {
+
+    it('should return an array of all cache keys', function (done) {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let keys = [
+        'key1',
+        'key2',
+        'key3'
+      ];
+      let value = 'foo';
+      let promises = [];
+      for (let key of keys) {
+        promises.push(new Promise(function (resolve, reject) {
+          cache.put(key, value)
+            .then(function () {
+              resolve(key);
+            });
+
+        }));
+      }
+      Promise.all(promises)
+        .then(function (values) {
+          assert.deepEqual(cache.keys(), keys);
+          done();
+        });
+
     });
 
   });
