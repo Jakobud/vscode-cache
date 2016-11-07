@@ -217,7 +217,11 @@ Cache.prototype.clearAll = function () {
  * @return {number} Unix Timestamp in seconds
  */
 Cache.prototype.getExpiration = function (key) {
-  return this.has(key) ? this.cache[key].expiration : undefined;
+  if (typeof (this.cache[key]) === 'undefined' || typeof (this.cache[key].expiration) === 'undefined') {
+    return undefined;
+  } else {
+    return this.cache[key].expiration;
+  }
 }
 
 /**
