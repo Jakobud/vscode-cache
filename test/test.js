@@ -238,4 +238,47 @@ describe('Cache', function () {
 
   });
 
+  describe('all', function () {
+
+    it('should return an object of all cached items', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let all = {
+        foo1: 'bar1',
+        foo2: 'bar2'
+      }
+      cache.put('foo1', 'bar1')
+        .then(function () {
+          return cache.put('foo2', 'bar2', 10);
+        })
+        .then(function () {
+          assert.deepEqual(cache.all(), all);
+        });
+    });
+
+    it('should return an empty object if there are no cache items', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      assert.deepEqual(cache.all(), {});
+    });
+
+  });
+
+  describe('flush', function () {
+
+    it('should empty the cache', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      cache.put('foo', 'bar')
+        .then(function () {
+          assert.notDeepEqual(cache.all(), {});
+          return cache.flush();
+        })
+        .then(function () {
+          assert.deepEqual(cache.all(), {});
+        });
+    });
+
+  });
+
 });
