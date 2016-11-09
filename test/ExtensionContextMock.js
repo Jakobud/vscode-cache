@@ -2,37 +2,37 @@
 
 const Promise = require('bluebird');
 
-let ExtensionContextMock = function () { }
+let ExtensionContextMock = function () {
+  this.globalState = {};
 
-ExtensionContextMock.prototype.globalState = function () {
+  // Get the cached item
+  this.globalState.get = function (key, defaultValue) {
 
-}
+    // If key does not exist
+    if (typeof (this[key]) === 'undefined') {
 
-ExtensionContextMock.prototype.globalState.get = function (key, defaultValue) {
+      // If default value is provided
+      if (typeof (defaultValue) !== 'undefined') {
+        return defaultValue;
+      } else {
+        return undefined;
+      }
 
-  // If key does not exist
-  if (typeof (this[key]) === 'undefined') {
-
-    // If default value is provided
-    if (typeof (defaultValue) !== 'undefined') {
-      return defaultValue;
     } else {
-      return undefined;
+
+      return this[key];
+
     }
-
-  } else {
-
-    return this[key];
-
   }
-}
 
-ExtensionContextMock.prototype.globalState.update = function (key, value) {
-  this[key] = value;
+  // Update a cached item
+  this.globalState.update = function (key, value) {
+    this[key] = value;
 
-  return new Promise((resolve, reject) => {
-    resolve(true);
-  });
+    return new Promise((resolve, reject) => {
+      resolve(true);
+    });
+  }
 }
 
 module.exports = ExtensionContextMock;
