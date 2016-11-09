@@ -91,7 +91,7 @@ describe('Cache', function () {
       let value = 'bar';
       return cache.put(key, value)
         .then(function () {
-          assert.equal(cache.cache[key].value, value);
+          assert.equal(cache.get(key), value);
         });
     });
 
