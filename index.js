@@ -185,7 +185,11 @@ Cache.prototype.keys = function () {
  * @return {object}
  */
 Cache.prototype.all = function () {
-  return this.cache;
+  let items = {};
+  for (let key in this.cache) {
+    items[key] = this.cache[key].value;
+  }
+  return items;
 }
 
 // Alias of all
