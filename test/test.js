@@ -247,7 +247,7 @@ describe('Cache', function () {
         foo1: 'bar1',
         foo2: 'bar2'
       }
-      cache.put('foo1', 'bar1')
+      return cache.put('foo1', 'bar1')
         .then(function () {
           return cache.put('foo2', 'bar2', 10);
         })
@@ -269,7 +269,7 @@ describe('Cache', function () {
     it('should empty the cache', function () {
       let context = new ExtensionContext();
       let cache = new Cache(context);
-      cache.put('foo', 'bar')
+      return cache.put('foo', 'bar')
         .then(function () {
           assert.notDeepEqual(cache.all(), {});
           return cache.flush();
