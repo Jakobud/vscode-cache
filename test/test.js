@@ -281,4 +281,83 @@ describe('Cache', function () {
 
   });
 
+  describe('getExpiration', function () {
+
+    it('should return the expiration for an item with an expiration', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let now = Math.floor(Date.now() / 1000);
+      let lifetime = 10;
+      let key = 'foo';
+      return cache.put(key, 'bar', lifetime)
+        .then(function () {
+          assert.equal(cache.getExpiration(key), now + lifetime);
+        });
+    });
+
+    it('should return undefined for an item without an expiration', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let key = 'foo';
+      return cache.put(key, 'bar')
+        .then(function () {
+          assert.equal(typeof (cache.getExpiration(key)), 'undefined');
+        });
+    });
+
+    it('should return undefined for a non-existent item', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      assert.equal(typeof (cache.getExpiration('foo')), 'undefined');
+    });
+
+  });
+
+  describe('isExpired', function () {
+
+    it('should return true if an item is expired', function (done) {
+      this.timeout(3000);
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let lifetime = 1;
+      let key = 'foo';
+      cache.put(key, 'bar', lifetime)
+        .then(function () {
+          setTimeout(function () {
+            assert.ok(cache.isExpired(key));
+            done();
+          }, 2000);
+        });
+    });
+
+    it('should return false if an item is not expired', function () {
+      this.timeout(3000);
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let lifetime = 1;
+      let key = 'foo';
+      return cache.put(key, 'bar', lifetime)
+        .then(function () {
+          assert.ok(!cache.isExpired(key));
+        });
+    });
+
+    it('should return false an item does not expire', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      let key = 'foo';
+      return cache.put(key, 'bar')
+        .then(function () {
+          assert.ok(!cache.isExpired(key));
+        });
+    });
+
+    it('should return false a key does not exist', function () {
+      let context = new ExtensionContext();
+      let cache = new Cache(context);
+      assert.ok(!cache.isExpired('foo'));
+    });
+
+  });
+
 });
