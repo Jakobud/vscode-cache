@@ -2,14 +2,16 @@
   "name": "vscode-cache",
   "version": "0.3.0",
   "description": "Persistent setting and value caching for Visual Studio Code extension authors",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "mocha test/test.js",
-    "jsdoc": "jsdoc2md --template README.hbs --separators --no-gfm --files index.js > README.md"
+    "test": "jest",
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://Jakobud@github.com/Jakobud/vscode-cache.git"
+    "url": "https://github.com/Jakobud/vscode-cache.git"
   },
   "keywords": [
     "vscode",
@@ -23,8 +25,15 @@
   },
   "homepage": "https://github.com/Jakobud/vscode-cache#readme",
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/vscode": "^1.95.0",
     "bluebird": "^3.4.6",
+    "jest": "^29.7.0",
     "jsdoc-to-markdown": "^2.0.1",
-    "mocha": "^3.1.2"
+    "mocha": "^3.1.2",
+    "ts-jest": "^29.2.5"
+  },
+  "dependencies": {
+    "typescript": "^5.7.2"
   }
 }
