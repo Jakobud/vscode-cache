@@ -161,6 +161,21 @@ class Cache {
   }
 
   /**
+   * @name getExpiration
+   * @desc Gets the expiration time for the cached item
+   * @function
+   * @param {string} key - The unique key for the cached item
+   * @return {number} Unix Timestamp in seconds
+   */
+  public getExpiration(key: string): number | undefined {
+    if (typeof (this.storage[key]) === 'undefined' || typeof (this.storage[key].expiration) === 'undefined') {
+      return undefined;
+    } else {
+      return this.storage[key].expiration;
+    }
+  }
+
+  /**
    * @name has
    * @desc Checks to see if unexpired item exists in the cache
    * @function
@@ -288,19 +303,9 @@ class Cache {
     return this.flush();
   }
 
-  /**
-   * @name getExpiration
-   * @desc Gets the expiration time for the cached item
-   * @function
-   * @param {string} key - The unique key for the cached item
-   * @return {number} Unix Timestamp in seconds
-   */
-  public getExpiration(key: string): number | undefined {
-    if (typeof (this.storage[key]) === 'undefined' || typeof (this.storage[key].expiration) === 'undefined') {
-      return undefined;
-    } else {
-      return this.storage[key].expiration;
-    }
+  // Alias of flush
+  public deleteAll() {
+    return this.flush();
   }
 }
 
