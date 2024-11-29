@@ -270,12 +270,12 @@ class Cache {
    * @return {object}
    */
   public all() {
-    // let items = {};
-    // for (let key in this.storage) {
-    //   items[key] = this.storage[key].value;
-    // }
-    // return items;
-    return this.storage;
+    let items: { [key: string]: any } = {};
+    for (let key in this.storage) {
+      items[key] = this.storage[key].value;
+    }
+    return items;
+    return this.storage.map;
   }
 
   // Alias of all
