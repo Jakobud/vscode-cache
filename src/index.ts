@@ -32,49 +32,66 @@ class Cache {
     this.storage = this.context.globalState.get(this.namespace, {});
   }
 
+  private updateGlobalState() {
+    (async () => {
+      try {
+        // Save to extension's globalState
+        await this.context.globalState.update(this.namespace, this.storage);
+      } catch (error) {
+        throw error;
+      }
+    })();
+  }
+
   /**
    * @name put
    * @method
    * @desc Store an item in the cache, with optional expiration
    * @param {string} key - The unique key for the cached item
    * @param {any} value - The value to cache
-   * @param {number} [expiration] - Optional expiration time in seconds
-   * @returns {Promise} Visual Studio Code Thenable (Promise)
+   * @param {number} [expiration] - Optional expiration time as UNIX timestamp milliseconds
+   * @returns {Cache} - This Cache object
    */
-  public put(key: string, value: any, expiration?: number): Thenable<void> {
+  public put(key: string, value: any, expiration?: number): this {
+    if (typeof (key) !== 'string') {
+      return this;
+    }
+
     let obj: CacheItem = {
       value: value,
     };
 
     // Set optional expiration
-    if (expiration && Number.isInteger(expiration)) {
-      obj.expiration = this.now() + expiration;
+    if (expiration && Number.isInteger(expiration) && expiration >= Date.now()) {
+      obj.expiration = expiration;
     }
 
     // Save to local cache object
     this.storage[key] = obj;
 
-    // Save to extension's globalState
-    return this.context.globalState.update(this.namespace, this.storage);
+    // Update the extension's globalState
+    this.updateGlobalState();
+
+    return this;
   }
 
   // Alias of put
-  public set(key: string, value: any, expiration?: number): Thenable<void> {
+  public set(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
   // Alias of put
-  public save(key: string, value: any, expiration?: number): Thenable<void> {
+  public save(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
   // Alias of put
-  public store(key: string, value: any, expiration?: number): Thenable<void> {
+  public store(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
   // Alias of put
-  public cache(key: string, value: any, expiration?: number): Thenable<void> {
+  public cache(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
@@ -160,30 +177,28 @@ class Cache {
    * @desc Removes an item from the cache
    * @function
    * @param {string} key - The unique key for the cached item
-   * @returns {Thenable} Visual Studio Code Thenable (Promise)
+   * @returns this
    */
-  public forget(key: string): Thenable<void> {
+  public forget(key: string): this {
     // Does item exist?
-    if (typeof (this.storage[key]) === 'undefined') {
-      return new Promise(function (resolve) {
-        resolve();
-      });
+    if (this.has(key)) {
+      // Delete from local object
+      delete this.storage[key];
+
+      // Update the extension's globalState
+      this.updateGlobalState();
     }
 
-    // Delete from local object
-    delete this.storage[key];
-
-    // Update the extension's globalState
-    return this.context.globalState.update(this.namespace, this.storage);
+    return this;
   }
 
   // Alias of forget
-  remove(key: string): Thenable<void> {
+  remove(key: string): this {
     return this.forget(key);
   }
 
   // Alias of forget
-  delete(key: string): Thenable<void> {
+  delete(key: string): this {
     return this.forget(key);
   }
 
@@ -232,11 +247,15 @@ class Cache {
    * @name flush
    * @desc Clears all items from the cache
    * @function
-   * @returns {Thenable} Visual Studio Code Thenable (Promise)
+   * @returns this - The Cache object
    */
   public flush() {
     this.storage = {};
-    return this.context.globalState.update(this.namespace, undefined);
+
+    // Update the extension's globalState
+    this.updateGlobalState();
+
+    return this;
   }
 
   // Alias of flush
