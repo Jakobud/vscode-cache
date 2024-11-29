@@ -136,6 +136,31 @@ class Cache {
   }
 
   /**
+   * @name setExpiration
+   * @desc Set the expiration time for a cached item
+   * @function
+   * @param key string - The unique key for the cached item
+   * @param expiration {number} - The expiration time in UNIX timestamp milliseconds
+   * @returns this | undefined
+   */
+  public setExpiration(key: string, expiration: number): this | undefined {
+    // If the cached item doesn't exist
+    if (!this.has(key)) {
+      return undefined;
+    }
+
+    // Set the expiration time
+    if (expiration && Number.isInteger(expiration) && expiration >= Date.now()) {
+      this.storage[key].expiration = expiration;
+    }
+
+    // Update the extension's globalState
+    this.updateGlobalState();
+
+    return this;
+  }
+
+  /**
    * @name has
    * @desc Checks to see if unexpired item exists in the cache
    * @function
