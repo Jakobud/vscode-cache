@@ -243,17 +243,6 @@ class Cache {
   }
 
   /**
-   * @name now
-   * @desc Helpfer function to get the current timestamp
-   * @function
-   * @private
-   * @return {number} Current Unix Timestamp in seconds
-   */
-  private now() {
-    return Math.floor(Date.now() / 1000);
-  }
-
-  /**
    * @name keys
    * @desc Get an array of all cached item keys
    * @function
