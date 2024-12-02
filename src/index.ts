@@ -53,21 +53,19 @@ class Cache {
    * @returns {Cache} - This Cache object
    */
   public put(key: string, value: any, expiration?: number): this {
-    if (typeof (key) !== 'string') {
+    if (typeof key !== 'string') {
       return this;
     }
 
-    let obj: CacheItem = {
+    // Save to local cache object
+    this.storage[key] = {
       value: value,
     };
 
     // Set optional expiration
-    if (expiration && Number.isInteger(expiration) && expiration >= Date.now()) {
-      obj.expiration = expiration;
+    if (expiration && Number.isInteger(expiration) && expiration > Date.now()) {
+      this.storage[key].expiration = expiration;
     }
-
-    // Save to local cache object
-    this.storage[key] = obj;
 
     // Update the extension's globalState
     this.updateGlobalState();
