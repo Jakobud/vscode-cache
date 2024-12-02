@@ -262,7 +262,6 @@ class Cache {
       items[key] = this.storage[key].value;
     }
     return items;
-    return this.storage.map;
   }
 
   // Alias of all
