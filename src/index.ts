@@ -205,8 +205,8 @@ class Cache {
     if (typeof (this.storage[key]) === 'undefined' || typeof (this.storage[key].expiration) === 'undefined') {
       return false;
     } else {
-      // Is expiration >= right now?
-      return this.now() >= this.storage[key].expiration;
+      // Is the expiration time in the future?
+      return this.storage[key].expiration <= Date.now();
     }
   }
 
