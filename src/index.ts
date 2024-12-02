@@ -77,22 +77,34 @@ class Cache {
     return this;
   }
 
-  // Alias of put
+  /**
+   * Alias for {@link put}
+   * @see put
+   */
   public set(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
-  // Alias of put
+  /**
+   * Alias for {@link put}
+   * @see put
+   */
   public save(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
-  // Alias of put
+  /**
+   * Alias for {@link put}
+   * @see put
+   */
   public store(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
-  // Alias of put
+  /**
+   * Alias for {@link put}
+   * @see put
+   */
   public cache(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
@@ -126,12 +138,18 @@ class Cache {
     }
   }
 
-  // Alias of get
+  /**
+   * Alias for {@link get}
+   * @see get
+   */
   public fetch(key: string, defaultValue?: any): any {
     return this.get(key, defaultValue);
   }
 
-  // Alias of get
+  /**
+   * Alias for {@link get}
+   * @see get
+   */
   public retrieve(key: string, defaultValue?: any): any {
     return this.get(key, defaultValue);
   }
@@ -198,7 +216,10 @@ class Cache {
     }
   }
 
-  // Alias of has
+  /**
+   * Alias for {@link has}
+   * @see has
+   */
   public exists(key: string): boolean {
     return this.has(key);
   }
@@ -238,12 +259,18 @@ class Cache {
     return this;
   }
 
-  // Alias of forget
+  /**
+   * Alias for {@link forget}
+   * @see forget
+   */
   remove(key: string): this {
     return this.forget(key);
   }
 
-  // Alias of forget
+  /**
+   * Alias for {@link forget}
+   * @see forget
+   */
   delete(key: string): this {
     return this.forget(key);
   }
@@ -270,7 +297,10 @@ class Cache {
     return items;
   }
 
-  // Alias of all
+  /**
+   * Alias for {@link all}
+   * @see all
+   */
   public getAll() {
     return this.all();
   }
@@ -289,12 +319,18 @@ class Cache {
     return this;
   }
 
-  // Alias of flush
+  /**
+   * Alias for {@link flush}
+   * @see flush
+   */
   public clearAll() {
     return this.flush();
   }
 
-  // Alias of flush
+  /**
+   * Alias for {@link flush}
+   * @see flush
+   */
   public deleteAll() {
     return this.flush();
   }
