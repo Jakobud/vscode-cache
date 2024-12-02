@@ -4,10 +4,11 @@
   "description": "Persistent setting and value caching for Visual Studio Code extension authors",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "watch": "tsc --watch"
+    "build:watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
