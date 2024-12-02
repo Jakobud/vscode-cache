@@ -181,7 +181,7 @@ class Cache {
    * @return {boolean}
    */
   public has(key: string): boolean {
-    if (typeof (this.storage[key]) === 'undefined') {
+    if ((typeof (this.storage[key]) === 'undefined') || (this.storage[key].expiration && this.storage[key].expiration <= Date.now())) {
       return false;
     } else {
       return this.isExpired(key) ? false : true;
