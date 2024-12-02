@@ -12,8 +12,8 @@ const defaultNamespace = 'cache';
 /**
  * @class Cache
  * @desc A module for use in developing a Visual Studio Code extension. It allows an extension to cache values across sessions with optional expiration times using the ExtensionContext.globalState.
- * @param {vscode.ExtensionContext} context - The Visual Studio Code extension context
- * @param {string} [namespace] - Optional namespace for cached items. Defaults to "cache"
+ * @param {vscode.ExtensionContext} context The Visual Studio Code extension context
+ * @param {string} [namespace] Optional namespace for cached items. Defaults to "cache"
  * @returns {Cache} The cache object
  */
 class Cache {
@@ -32,6 +32,11 @@ class Cache {
     this.storage = this.context.globalState.get(this.namespace, {});
   }
 
+  /**
+   * @function updateGlobalState
+   * @private
+   * @desc Updates the VSCode extension's globalState with the current cache object
+   */
   private updateGlobalState() {
     (async () => {
       try {
@@ -44,13 +49,12 @@ class Cache {
   }
 
   /**
-   * @name put
-   * @method
+   * @function put
    * @desc Store an item in the cache, with optional expiration
-   * @param {string} key - The unique key for the cached item
-   * @param {any} value - The value to cache
-   * @param {number} [expiration] - Optional expiration time as UNIX timestamp milliseconds
-   * @returns {Cache} - This Cache object
+   * @param {string} key The unique key for the cached item
+   * @param {any} value The value to cache
+   * @param {number} [expiration] Optional expiration time as UNIX timestamp milliseconds
+   * @returns {Cache} This Cache object
    */
   public put(key: string, value: any, expiration?: number): this {
     if (typeof key !== 'string') {
@@ -94,11 +98,10 @@ class Cache {
   }
 
   /**
-   * @name get
+   * @function get
    * @desc Get an item from the cache, or the optional default value
-   * @function
-   * @param {string} key - The unique key for the cached item
-   * @param {any} [defaultValue] - The optional default value to return if the cached item does not exist or is expired
+   * @param {string} key The unique key for the cached item
+   * @param {any} [defaultValue] The optional default value to return if the cached item does not exist or is expired
    * @returns {any} Returns the cached value or optional defaultValue
    */
   public get(key: string, defaultValue?: any): any {
@@ -134,12 +137,11 @@ class Cache {
   }
 
   /**
-   * @name setExpiration
+   * @function setExpiration
    * @desc Set the expiration time for a cached item
-   * @function
-   * @param key string - The unique key for the cached item
-   * @param expiration {number} - The expiration time in UNIX timestamp milliseconds
-   * @returns this | undefined
+   * @param {string} key The unique key for the cached item
+   * @param {number} expiration The expiration time in UNIX timestamp milliseconds
+   * @returns this
    */
   public setExpiration(key: string, expiration: number): this {
     // If the cached item doesn't exist
@@ -159,10 +161,19 @@ class Cache {
   }
 
   /**
-   * @name getExpiration
+   * @function setRelativeExpiration
+   * @param {string} key The unique key for the cached item
+   * @param {number} expiration The expiration time in milliseconds relative to the current time
+   * @returns this
+   */
+  public setRelativeExpiration(key: string, expiration: number): this {
+    return this.setExpiration(key, Date.now() + expiration);
+  }
+
+  /**
+   * @function getExpiration
    * @desc Gets the expiration time for the cached item
-   * @function
-   * @param {string} key - The unique key for the cached item
+   * @param {string} key The unique key for the cached item
    * @return {number} Unix Timestamp in seconds
    */
   public getExpiration(key: string): number | undefined {
@@ -174,10 +185,9 @@ class Cache {
   }
 
   /**
-   * @name has
+   * @function has
    * @desc Checks to see if unexpired item exists in the cache
-   * @function
-   * @param {string} key - The unique key for the cached item
+   * @param {string} key The unique key for the cached item
    * @return {boolean}
    */
   public has(key: string): boolean {
@@ -194,10 +204,9 @@ class Cache {
   }
 
   /**
-   * @name isExpired
+   * @function isExpired
    * @desc Checks to see if cached item is expired
-   * @function
-   * @param {object} item - Cached item object
+   * @param {string} key The unique key for the cached item
    * @return {boolean}
    */
   public isExpired(key: string): boolean {
@@ -211,10 +220,9 @@ class Cache {
   }
 
   /**
-   * @name forget
+   * @function forget
    * @desc Removes an item from the cache
-   * @function
-   * @param {string} key - The unique key for the cached item
+   * @param {string} key The unique key for the cached item
    * @returns this
    */
   public forget(key: string): this {
@@ -241,9 +249,8 @@ class Cache {
   }
 
   /**
-   * @name keys
+   * @function keys
    * @desc Get an array of all cached item keys
-   * @function
    * @return {string[]}
    */
   public keys() {
@@ -251,9 +258,8 @@ class Cache {
   }
 
   /**
-   * @name all
+   * @function all
    * @desc Returns object of all cached items
-   * @function
    * @return {object}
    */
   public all() {
@@ -270,10 +276,9 @@ class Cache {
   }
 
   /**
-   * @name flush
+   * @function flush
    * @desc Clears all items from the cache
-   * @function
-   * @returns this - The Cache object
+   * @returns this
    */
   public flush() {
     this.storage = {};
