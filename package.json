@@ -1,7 +1,7 @@
 {
   "name": "vscode-cache",
-  "version": "0.3.0",
-  "description": "Persistent setting and value caching for Visual Studio Code extension authors",
+  "version": "1.0.0",
+  "description": "Persistent setting and value caching for Visual Studio Code extensions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
