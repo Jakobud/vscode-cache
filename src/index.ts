@@ -141,14 +141,14 @@ class Cache {
    * @param expiration {number} - The expiration time in UNIX timestamp milliseconds
    * @returns this | undefined
    */
-  public setExpiration(key: string, expiration: number): this | undefined {
+  public setExpiration(key: string, expiration: number): this {
     // If the cached item doesn't exist
     if (!this.has(key)) {
-      return undefined;
+      return this;
     }
 
     // Set the expiration time
-    if (expiration && Number.isInteger(expiration) && expiration >= Date.now()) {
+    if (expiration && Number.isInteger(expiration) && expiration > Date.now()) {
       this.storage[key].expiration = expiration;
     }
 
