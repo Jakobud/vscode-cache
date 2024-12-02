@@ -166,7 +166,7 @@ class Cache {
    * @return {number} Unix Timestamp in seconds
    */
   public getExpiration(key: string): number | undefined {
-    if (typeof (this.storage[key]) === 'undefined' || typeof (this.storage[key].expiration) === 'undefined') {
+    if (typeof (this.storage[key]) === 'undefined' || typeof (this.storage[key].expiration) === 'undefined' || this.storage[key].expiration <= Date.now()) {
       return undefined;
     } else {
       return this.storage[key].expiration;
