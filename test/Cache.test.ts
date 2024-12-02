@@ -369,7 +369,4 @@ describe('Cache', () => {
       expect(cache.all()).toEqual({});
     });
   });
-
-
-
 });
