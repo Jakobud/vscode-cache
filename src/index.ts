@@ -1,6 +1,6 @@
 'use strict';
 
-import * as vscode from 'vscode';
+import { ExtensionContext } from 'vscode';
 
 interface CacheItem {
   value: any;
@@ -12,16 +12,16 @@ const defaultNamespace = 'cache';
 /**
  * @class Cache
  * @desc A module for use in developing a Visual Studio Code extension. It allows an extension to cache values across sessions with optional expiration times using the ExtensionContext.globalState.
- * @param {vscode.ExtensionContext} context The Visual Studio Code extension context
+ * @param {ExtensionContext} context The Visual Studio Code extension context
  * @param {string} [namespace] Optional namespace for cached items. Defaults to "cache"
  * @returns {Cache} The cache object
  */
 class Cache {
-  private context: vscode.ExtensionContext;
+  private context: ExtensionContext;
   private namespace: string;
   private storage: { [key: string]: CacheItem };
 
-  public constructor(context: vscode.ExtensionContext, namespace?: string) {
+  public constructor(context: ExtensionContext, namespace?: string) {
     // ExtensionContext
     this.context = context;
 
