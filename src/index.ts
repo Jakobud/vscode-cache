@@ -287,6 +287,14 @@ class Cache {
   }
 
   /**
+   * Alias for {@link forget}
+   * @see forget
+   */
+  clear(key: string): this {
+    return this.forget(key);
+  }
+
+  /**
    * @function keys
    * @desc Get an array of all cached item keys
    * @return {string[]}
