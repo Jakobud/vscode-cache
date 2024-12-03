@@ -353,6 +353,14 @@ class Cache {
   public deleteAll() {
     return this.flush();
   }
+
+  /**
+   * Alias for {@link flush}
+   * @see flush
+   */
+  public removeAll() {
+    return this.flush();
+  }
 }
 
 export default Cache;
