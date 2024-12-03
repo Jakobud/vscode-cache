@@ -53,7 +53,7 @@ class Cache {
    * @desc Store an item in the cache, with optional expiration
    * @param {string} key The unique key for the cached item
    * @param {any} value The value to cache
-   * @param {number} [expiration] Optional expiration time as UNIX timestamp milliseconds
+   * @param {number} [expiration] Optional relative expiration time in milliseconds
    * @returns {Cache} This Cache object
    */
   public put(key: string, value: any, expiration?: number): this {
@@ -67,8 +67,8 @@ class Cache {
     };
 
     // Set optional expiration
-    if (expiration && Number.isInteger(expiration) && expiration > Date.now()) {
-      this.storage[key].expiration = expiration;
+    if (expiration) {
+      this.setExpiration(key, expiration);
     }
 
     // Update the extension's globalState
@@ -156,12 +156,27 @@ class Cache {
 
   /**
    * @function setExpiration
-   * @desc Set the expiration time for a cached item
+   * @desc Set the relative expiration time for a cached item
+   * @param {string} key The unique key for the cached item
+   * @param {number} expiration The expiration time in milliseconds relative to the current time
+   * @returns this
+   */
+  public setExpiration(key: string, expiration: number): this {
+    if (expiration && Number.isInteger(expiration)) {
+      return this.setAbsoluteExpiration(key, Date.now() + expiration);
+    }
+
+    return this;
+  }
+
+  /**
+   * @function setAbsoluteExpiration
+   * @desc Set the absolute expiration time for a cached item
    * @param {string} key The unique key for the cached item
    * @param {number} expiration The expiration time in UNIX timestamp milliseconds
    * @returns this
    */
-  public setExpiration(key: string, expiration: number): this {
+  public setAbsoluteExpiration(key: string, expiration: number): this {
     // If the cached item doesn't exist
     if (!this.has(key)) {
       return this;
@@ -170,10 +185,10 @@ class Cache {
     // Set the expiration time
     if (expiration && Number.isInteger(expiration) && expiration > Date.now()) {
       this.storage[key].expiration = expiration;
-    }
 
-    // Update the extension's globalState
-    this.updateGlobalState();
+      // Update the extension's globalState
+      this.updateGlobalState();
+    }
 
     return this;
   }
