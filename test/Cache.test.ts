@@ -51,10 +51,10 @@ describe('Cache', () => {
     });
 
     test(`Will set an expiration`, () => {
-      const expiration = Date.now() + 10000;
+      const expiration = 1000;
       cache.put('foo', 'bar', expiration)
       expect(cache.get('foo')).toEqual('bar');
-      expect(cache.getExpiration('foo')).toEqual(expiration);
+      expect(cache.getExpiration('foo')).toBeGreaterThan(Date.now());
     });
 
     test(`Will not set expiration if not provided`, () => {
@@ -70,7 +70,7 @@ describe('Cache', () => {
     });
 
     test(`Will not set expiration in the past`, () => {
-      const expiration = Date.now() - 10000;
+      const expiration = -1000;
       cache.put('foo', 'bar', expiration)
       expect(cache.get('foo')).toEqual('bar');
       expect(cache.getExpiration('foo')).toEqual(undefined);
@@ -134,7 +134,7 @@ describe('Cache', () => {
     });
 
     test(`Returns undefined if expired`, () => {
-      const expiration = Date.now() + 1000;
+      const expiration = 1000;
       cache.put('foo', 'bar', expiration);
 
       jest.useFakeTimers();
@@ -148,13 +148,13 @@ describe('Cache', () => {
     });
 
     test(`Returns default value if expired`, () => {
-      const expiration = Date.now() + 1000;
-      cache.put('foos', 'bar', expiration);
+      const expiration = 1000;
+      cache.put('foo', 'bar', expiration);
 
       jest.useFakeTimers();
 
       setTimeout(() => {
-        expect(cache.get('foos', 'baz')).toEqual('baz');
+        expect(cache.get('foo', 'baz')).toEqual('baz');
       }, 2000);
 
       jest.advanceTimersByTime(3000);
@@ -164,14 +164,14 @@ describe('Cache', () => {
 
   describe('setExpiration', () => {
     test(`Sets expiration`, () => {
-      const expiration = Date.now() + 10000;
+      const expiration = 1000;
       cache.put('foo', 'bar');
       cache.setExpiration('foo', expiration);
-      expect(cache.getExpiration('foo')).toEqual(expiration);
+      expect(cache.getExpiration('foo')).toBeGreaterThan(Date.now());
     });
 
     test(`Does not set expiration if key does not exist`, () => {
-      const expiration = Date.now() + 10000;
+      const expiration = 1000;
       cache.setExpiration('foo', expiration);
       expect(cache.getExpiration('foo')).toEqual(undefined);
     });
@@ -182,7 +182,7 @@ describe('Cache', () => {
     });
 
     test(`Does not set expirations in the past`, () => {
-      const expiration = Date.now() - 10000;
+      const expiration = -1000;
       cache.setExpiration('foo', expiration);
       expect(cache.getExpiration('foo')).toEqual(undefined);
     });
@@ -193,42 +193,42 @@ describe('Cache', () => {
     });
 
     test(`Is chainable`, () => {
-      cache.put('foo', 'bar').setExpiration('foo', Date.now() + 1000).put('baz', 'qux').setExpiration('baz', Date.now() + 1000);
+      cache.put('foo', 'bar').setExpiration('foo', 1000).put('baz', 'qux').setExpiration('baz', 1000);
       expect(cache.get('foo')).toEqual('bar');
       expect(cache.get('baz')).toEqual('qux');
     });
 
     test(`Will overwrite existing expiration`, () => {
-      const expiration = Date.now() + 10000;
+      const expiration = 1000;
       cache.put('foo', 'bar', expiration);
-      cache.setExpiration('foo', expiration + 10000);
-      expect(cache.getExpiration('foo')).toEqual(expiration + 10000);
+      cache.setExpiration('foo', expiration + 1000);
+      expect(cache.getExpiration('foo')).toBeGreaterThan(Date.now() + 1000);
     });
   });
 
-  describe('setRelativeExpiration', () => {
+  describe('setAbsoluteExpiration', () => {
     test(`Sets an expiration relative to Date.now()`, () => {
       cache.put('foo', 'bar');
-      cache.setRelativeExpiration('foo', 1000);
+      cache.setAbsoluteExpiration('foo', Date.now() + 1000);
       expect(cache.getExpiration('foo')).toBeGreaterThan(Date.now());
     });
 
     test(`Does not set expiration if key does not exist`, () => {
-      cache.setRelativeExpiration('foo', 1000);
+      cache.setAbsoluteExpiration('foo', Date.now() + 1000);
       expect(cache.getExpiration('foo')).toEqual(undefined);
     });
 
     test(`Does not set non-numeric expirations`, () => {
-      cache.setRelativeExpiration('foo', 'not a number' as any);
+      cache.setAbsoluteExpiration('foo', 'not a number' as any);
       expect(cache.getExpiration('foo')).toEqual(undefined);
     });
   });
 
   describe('getExpiration', () => {
     test(`Returns expiration`, () => {
-      const expiration = Date.now() + 10000;
+      const expiration = 1000;
       cache.put('foo', 'bar', expiration);
-      expect(cache.getExpiration('foo')).toEqual(expiration);
+      expect(cache.getExpiration('foo')).toBeGreaterThan(Date.now());
     });
 
     test(`Returns undefined if key does not exist`, () => {
@@ -241,7 +241,7 @@ describe('Cache', () => {
     });
 
     test(`Returns undefined if expired`, () => {
-      const expiration = Date.now() + 1000;
+      const expiration = 1000;
       cache.put('foo', 'bar', expiration);
 
       jest.useFakeTimers();
@@ -266,7 +266,7 @@ describe('Cache', () => {
     });
 
     test(`Returns false if expiration is in the future`, () => {
-      const expiration = Date.now() + 10000;
+      const expiration = 1000;
       cache.put('foo', 'bar', expiration);
       expect(cache.isExpired('foo')).toEqual(false);
     });
@@ -283,7 +283,7 @@ describe('Cache', () => {
     });
 
     test(`Returns false if expired`, () => {
-      const expiration = Date.now() + 1000;
+      const expiration = 1000;
       cache.put('foo', 'bar', expiration);
 
       jest.useFakeTimers();
@@ -309,11 +309,18 @@ describe('Cache', () => {
       expect(cache.get('foo')).toEqual(undefined);
     });
 
-    test(`Removes key even if item is expired`, () => {
-      const expiration = Date.now() - 10000;
-      cache.put('foo', 'bar', expiration);
-      cache.forget('foo');
-      expect(cache.get('foo')).toEqual(undefined);
+    test(`Removes key if item is expired`, () => {
+      cache.put('foo', 'bar', 1000);
+
+      jest.useFakeTimers();
+
+      setTimeout(() => {
+        cache.forget('foo');
+        expect(cache.get('foo')).toEqual(undefined);
+      }, 2000);
+
+      jest.advanceTimersByTime(3000);
+      jest.useRealTimers();
     });
 
     test(`Returns "this"`, () => {
