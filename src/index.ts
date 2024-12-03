@@ -130,7 +130,13 @@ class Cache {
     } else {
       // Is item expired?
       if (this.isExpired(key)) {
-        return undefined;
+
+        // Return default value
+        if (typeof (defaultValue) !== 'undefined') {
+          return defaultValue;
+        } else {
+          return undefined;
+        }
       }
 
       // Otherwise return the value
@@ -191,16 +197,6 @@ class Cache {
     }
 
     return this;
-  }
-
-  /**
-   * @function setRelativeExpiration
-   * @param {string} key The unique key for the cached item
-   * @param {number} expiration The expiration time in milliseconds relative to the current time
-   * @returns this
-   */
-  public setRelativeExpiration(key: string, expiration: number): this {
-    return this.setExpiration(key, Date.now() + expiration);
   }
 
   /**
