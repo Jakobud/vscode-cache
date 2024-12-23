@@ -10,7 +10,8 @@
     "test:watch": "jest --watch",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "build:doc": "jsdoc2md --template src/README-TEMPLATE.md --files ./src/*.ts --no-gfm --configure ./jsdoc2md.json > ./README.md"
+    "build:doc": "jsdoc2md --template src/README-TEMPLATE.md --files ./src/*.ts --no-gfm --configure ./jsdoc2md.json > ./README.md",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
