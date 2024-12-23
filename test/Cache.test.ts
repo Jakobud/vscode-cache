@@ -2,17 +2,21 @@ import createMockExtensionContext from './createMockExtensionContext';
 import { describe, expect, jest, test } from '@jest/globals';
 import Cache from "../src/index";
 
-
-
 describe('Cache', () => {
   let context: any;
   let cache: Cache;
 
+  // Prepare before each test
   beforeEach(() => {
+    // Create mock VSCode Extension Context
+    // https://code.visualstudio.com/api/references/vscode-api#ExtensionContext
     context = createMockExtensionContext();
+
+    // instantiate a new cache
     cache = new Cache(context);
   });
 
+  // Cache.put()
   describe('put', () => {
     test(`Stores a string value`, () => {
       cache.put('foo', 'bar')
@@ -94,6 +98,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.get()
   describe('get', () => {
     test(`Returns a string value`, () => {
       cache.put('foo', 'bar')
@@ -162,6 +167,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.setExpiration()
   describe('setExpiration', () => {
     test(`Sets expiration`, () => {
       const expiration = 1000;
@@ -206,6 +212,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.setAbsoluteExpiration
   describe('setAbsoluteExpiration', () => {
     test(`Sets an expiration relative to Date.now()`, () => {
       cache.put('foo', 'bar');
@@ -224,6 +231,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.getExpiration()
   describe('getExpiration', () => {
     test(`Returns expiration`, () => {
       const expiration = 1000;
@@ -255,6 +263,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.isExpired()
   describe('isExpired', () => {
     test(`Returns false if key does not exist`, () => {
       expect(cache.isExpired('foo')).toEqual(false);
@@ -272,6 +281,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.has()
   describe('has', () => {
     test(`Returns true if key exists`, () => {
       cache.put('foo', 'bar');
@@ -297,6 +307,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.forget()
   describe('forget', () => {
     test(`Removes key from cache`, () => {
       cache.put('foo', 'bar');
@@ -335,6 +346,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.flush()
   describe('flush', () => {
     test(`Removes all keys`, () => {
       cache.put('foo', 'bar').put('baz', 'qux');
@@ -355,6 +367,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.keys()
   describe('keys', () => {
     test(`Returns an array of keys`, () => {
       cache.put('foo', 'bar').put('baz', 'qux');
@@ -366,6 +379,7 @@ describe('Cache', () => {
     });
   });
 
+  // Cache.all()
   describe('all', () => {
     test(`Returns an object of all keys and values`, () => {
       cache.put('foo', 'bar').put('baz', 'qux');
