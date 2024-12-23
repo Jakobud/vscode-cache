@@ -14,7 +14,7 @@ const defaultNamespace = 'cache';
  * @desc A module for use in developing a Visual Studio Code extension. It allows an extension to cache values across sessions with optional expiration times using the ExtensionContext.globalState.
  * @param {ExtensionContext} context The Visual Studio Code extension context
  * @param {string} [namespace] Optional namespace for cached items. Defaults to "cache"
- * @returns {Cache} The cache object
+ * @returns {this}
  */
 class Cache {
   private context: ExtensionContext;
@@ -33,7 +33,7 @@ class Cache {
   }
 
   /**
-   * @function updateGlobalState
+   * @name updateGlobalState
    * @private
    * @desc Updates the VSCode extension's globalState with the current cache object
    */
@@ -49,12 +49,18 @@ class Cache {
   }
 
   /**
-   * @function put
+   * @name put
+   * @memberof Cache
+   * @instance
    * @desc Store an item in the cache, with optional expiration
+   * @example // Basic usage
+   * cache.put('foo', 'bar');
+   * @example // Adding expiration
+   * cache.put('boz', 'cuz', 10000);
    * @param {string} key The unique key for the cached item
    * @param {any} value The value to cache
    * @param {number} [expiration] Optional relative expiration time in milliseconds
-   * @returns {Cache} This Cache object
+   * @returns {this}
    */
   public put(key: string, value: any, expiration?: number): this {
     if (typeof key !== 'string') {
@@ -78,40 +84,66 @@ class Cache {
   }
 
   /**
-   * Alias for {@link put}
-   * @see put
+   * @name set
+   * @memberof Cache
+   * @instance
+   * @desc Alias of put
+   * @example
+   * cache.set('foo', 'bar');
+   * @returns {this}
    */
   public set(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
   /**
-   * Alias for {@link put}
-   * @see put
+   * @name save
+   * @memberof Cache
+   * @instance
+   * @desc Alias of put
+   * @example
+   * cache.save('foo', 'bar');
+   * @returns {this}
    */
   public save(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
   /**
-   * Alias for {@link put}
-   * @see put
+   * @name store
+   * @memberof Cache
+   * @instance
+   * @desc Alias of put
+   * @example
+   * cache.store('foo', 'bar');
+   * @returns {this}
    */
   public store(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
   /**
-   * Alias for {@link put}
-   * @see put
+   * @name cache
+   * @memberof Cache
+   * @instance
+   * @desc Alias of put
+   * @example
+   * cache.cache('foo', 'bar');
+   * @returns {this}
    */
   public cache(key: string, value: any, expiration?: number): this {
     return this.put(key, value, expiration);
   }
 
   /**
-   * @function get
+   * @name get
+   * @memberof Cache
+   * @instance
    * @desc Get an item from the cache, or the optional default value
+   * @example // Basic usage
+   * const foo = cache.get('foo');
+   * @example // Providing default value
+   * const bar = cache.get('bar', 'some default value');
    * @param {string} key The unique key for the cached item
    * @param {any} [defaultValue] The optional default value to return if the cached item does not exist or is expired
    * @returns {any} Returns the cached value or optional defaultValue
@@ -145,27 +177,41 @@ class Cache {
   }
 
   /**
-   * Alias for {@link get}
-   * @see get
+   * @name fetch
+   * @memberof Cache
+   * @instance
+   * @desc Alias of get
+   * @example
+   * const foo = cache.fetch('foo');
+   * @returns {any}
    */
   public fetch(key: string, defaultValue?: any): any {
     return this.get(key, defaultValue);
   }
 
   /**
-   * Alias for {@link get}
-   * @see get
+   * @name retrieve
+   * @memberof Cache
+   * @instance
+   * @desc Alias of get
+   * @example
+   * const foo = cache.retrieve('foo');
+   * @returns {any}
    */
   public retrieve(key: string, defaultValue?: any): any {
     return this.get(key, defaultValue);
   }
 
   /**
-   * @function setExpiration
+   * @name setExpiration
+   * @memberof Cache
+   * @instance
    * @desc Set the relative expiration time for a cached item
+   * @example // Set expiration for 10 seconds
+   * cache.setExpiration('foo', 10000);
    * @param {string} key The unique key for the cached item
    * @param {number} expiration The expiration time in milliseconds relative to the current time
-   * @returns this
+   * @returns {this}
    */
   public setExpiration(key: string, expiration: number): this {
     if (expiration && Number.isInteger(expiration)) {
@@ -176,11 +222,15 @@ class Cache {
   }
 
   /**
-   * @function setAbsoluteExpiration
+   * @name setAbsoluteExpiration
+   * @memberof Cache
+   * @instance
    * @desc Set the absolute expiration time for a cached item
+   * @example // Set expiration for December 25, 2050, 12:00:00 PM GMT
+   * cache.setAbsoluteExpiration('foo', 2555582400000);
    * @param {string} key The unique key for the cached item
    * @param {number} expiration The expiration time in UNIX timestamp milliseconds
-   * @returns this
+   * @returns {this}
    */
   public setAbsoluteExpiration(key: string, expiration: number): this {
     // If the cached item doesn't exist
@@ -200,8 +250,12 @@ class Cache {
   }
 
   /**
-   * @function getExpiration
+   * @name getExpiration
+   * @memberof Cache
+   * @instance
    * @desc Gets the expiration time for the cached item
+   * @example // Get expiration time for 'foo'
+   * const expiration = cache.getExpiration('foo');
    * @param {string} key The unique key for the cached item
    * @return {number} Unix Timestamp in seconds
    */
@@ -214,8 +268,12 @@ class Cache {
   }
 
   /**
-   * @function has
+   * @name has
+   * @memberof Cache
+   * @instance
    * @desc Checks to see if unexpired item exists in the cache
+   * @example // Check if 'foo' exists
+   * if (cache.has('foo')) { ... }
    * @param {string} key The unique key for the cached item
    * @return {boolean}
    */
@@ -228,16 +286,25 @@ class Cache {
   }
 
   /**
-   * Alias for {@link has}
-   * @see has
+   * @name exists
+   * @memberof Cache
+   * @instance
+   * @desc Alias of has
+   * @example
+   * if (cache.exists('foo')) { ... }
+   * @returns {boolean}
    */
   public exists(key: string): boolean {
     return this.has(key);
   }
 
   /**
-   * @function isExpired
+   * @name isExpired
+   * @memberof Cache
+   * @instance
    * @desc Checks to see if cached item is expired
+   * @example // Check if 'foo' is expired
+   * if (cache.isExpired('foo')) { ... }
    * @param {string} key The unique key for the cached item
    * @return {boolean}
    */
@@ -252,10 +319,14 @@ class Cache {
   }
 
   /**
-   * @function forget
+   * @name forget
+   * @memberof Cache
+   * @instance
    * @desc Removes an item from the cache
+   * @example // Remove 'foo' from the cache
+   * cache.forget('foo');
    * @param {string} key The unique key for the cached item
-   * @returns this
+   * @returns {this}
    */
   public forget(key: string): this {
     // Does item exist?
@@ -271,32 +342,51 @@ class Cache {
   }
 
   /**
-   * Alias for {@link forget}
-   * @see forget
+   * @name remove
+   * @memberof Cache
+   * @instance
+   * @desc Alias of forget
+   * @example
+   * cache.remove('foo');
+   * @returns {this}
    */
   remove(key: string): this {
     return this.forget(key);
   }
 
   /**
-   * Alias for {@link forget}
-   * @see forget
+   * @name delete
+   * @memberof Cache
+   * @instance
+   * @desc Alias of forget
+   * @example
+   * cache.delete('foo');
+   * @returns {this}
    */
   delete(key: string): this {
     return this.forget(key);
   }
 
   /**
-   * Alias for {@link forget}
-   * @see forget
+   * @name clear
+   * @memberof Cache
+   * @instance
+   * @desc Alias of forget
+   * @example
+   * cache.clear('foo');
+   * @returns {this}
    */
   clear(key: string): this {
     return this.forget(key);
   }
 
   /**
-   * @function keys
+   * @name keys
+   * @memberof Cache
+   * @instance
    * @desc Get an array of all cached item keys
+   * @example // Get all keys
+   * const keys = cache.keys();
    * @return {string[]}
    */
   public keys() {
@@ -304,8 +394,12 @@ class Cache {
   }
 
   /**
-   * @function all
+   * @name all
+   * @memberof Cache
+   * @instance
    * @desc Returns object of all cached items
+   * @example // Get all items
+   * const items = cache.all();
    * @return {object}
    */
   public all() {
@@ -317,17 +411,26 @@ class Cache {
   }
 
   /**
-   * Alias for {@link all}
-   * @see all
+   * @name getAll
+   * @memberof Cache
+   * @instance
+   * @desc Alias of all
+   * @example
+   * const items = cache.getAll();
+   * @returns {object}
    */
   public getAll() {
     return this.all();
   }
 
   /**
-   * @function flush
+   * @name flush
+   * @memberof Cache
+   * @instance
    * @desc Clears all items from the cache
-   * @returns this
+   * @example // Clear all items
+   * cache.flush();
+   * @returns {this}
    */
   public flush() {
     this.storage = {};
@@ -339,32 +442,52 @@ class Cache {
   }
 
   /**
-   * Alias for {@link flush}
-   * @see flush
+   * @name clearAll
+   * @memberof Cache
+   * @instance
+   * @desc Alias of flush
+   * @example
+   * cache.clearAll();
+   * @returns {this}
    */
   public clearAll() {
     return this.flush();
   }
 
   /**
-   * Alias for {@link flush}
-   * @see flush
+   * @name deleteAll
+   * @memberof Cache
+   * @instance
+   * @desc Alias of flush
+   * @example
+   * cache.deleteAll();
+   * @returns {this}
    */
   public deleteAll() {
     return this.flush();
   }
 
   /**
-   * Alias for {@link flush}
-   * @see flush
+   * @name removeAll
+   * @memberof Cache
+   * @instance
+   * @desc Alias of flush
+   * @example
+   * cache.removeAll();
+   * @returns {this}
    */
   public removeAll() {
     return this.flush();
   }
 
   /**
-   * Alias for {@link flush}
-   * @see flush
+   * @name forgetAll
+   * @memberof Cache
+   * @instance
+   * @desc Alias of flush
+   * @example
+   * cache.forgetAll();
+   * @returns {this}
    */
   public forgetAll() {
     return this.flush();
