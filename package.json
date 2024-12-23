@@ -39,7 +39,6 @@
     "jest": "^29.7.0",
     "jsdoc-babel": "^0.5.0",
     "jsdoc-to-markdown": "^9.1.1",
-    "jsdox": "^0.4.10",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.2"
   }
